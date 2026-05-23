@@ -1,10 +1,14 @@
 name: AppSec Pipeline
 
 on:
-   push: 
-     branches: 
-       - main
+  push:
+    branches:
+      - main
 
+  pull_request:
+    branches:
+      - main
+ 
 jobs:
   security_scan:
     runs-on: ubuntu-latest
@@ -16,17 +20,26 @@ jobs:
          fetch-depth: 0
     
      - name: Run Semgrep
-       uses: returntocorp/semgrep-action@v1
-       with:
-         config: auto
-    
+       run: |
+          docker run --rm -v "${{ github.workspace }}:/src" \
+          returntocorp/semgrep semgrep \
+          --config=auto \
+          --sarif \
+          --output=/src/semgrep.sarif \
+          /src
+ 
      - name: Run Gitleaks
-       uses: gitleaks/gitleaks-action@v2
-       env:
-         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+       run: |
+          docker run --rm -v "${{ github.workspace }}:/path" \
+          zricethezav/gitleaks:latest detect \
+          --source="/path" \
+          --report-path=/path/gitleaks.json \
+          --report-format=json
 
-     - name: Upload Scan Results
-       uses: actions/upload-artifact@v4
-       with:
-         name: security-results
-         path: .
+     - name: Run Gitleaks
+       run: |
+         docker run --rm -v "${{ github.workspace }}:/path" \
+         zricethezav/gitleaks:latest detect \
+         --source="/path" \
+         --report-path=/path/gitleaks.json \
+         --report-format=json

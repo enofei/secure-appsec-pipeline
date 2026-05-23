@@ -1,5 +1,6 @@
 name: AppSec Pipeline
-on:
+
+  on:
    push: 
      branches: 
        - main

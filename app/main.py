@@ -1,1 +1,1 @@
-print("Pipeline Trigger Test")
+print("Triggering GitHub Actions")

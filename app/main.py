@@ -1,1 +1,1 @@
-print("AppSec Pipeline")
+print("Pipeline Trigger Test")

@@ -1,6 +1,6 @@
 name: AppSec Pipeline
 
-  on:
+on:
    push: 
      branches: 
        - main
@@ -17,8 +17,6 @@ jobs:
       uses: returntocorp/semgrep-action@v2
       with:
         config: auto
-
-    - name: Run Gitleaks
-      uses: gitleaks/gitleaks-action@v2
- 
         
+    - name: Run Gitleaks
+      run: docker run --rm -v ${{ github.workspace }}:/path zricethezav/gitleaks:latest detect --source="/path" --verbose

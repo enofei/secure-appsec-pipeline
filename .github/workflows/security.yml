@@ -1,0 +1,23 @@
+name: AppSec Pipeline
+on:
+   push: 
+     branches: 
+       - main
+
+jobs:
+  security_scan:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Run Semgrep
+      uses: returntocorp/semgrep-action@v1
+      with:
+        config: auto
+
+    - name: Run Gitleaks
+      uses: gitleaks/gitleaks-action@v2
+ 
+        

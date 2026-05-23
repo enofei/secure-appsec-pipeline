@@ -16,7 +16,7 @@ jobs:
          fetch-depth: 0
     
      - name: Run Semgrep
-       uses: returntocorp/semgrep-action@v2
+       uses: returntocorp/semgrep-action@v1
        with:
          config: auto
     

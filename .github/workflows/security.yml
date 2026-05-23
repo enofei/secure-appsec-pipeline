@@ -10,13 +10,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Code
-      uses: actions/checkout@v4
-
-    - name: Run Semgrep
-      uses: returntocorp/semgrep-action@v2
-      with:
-        config: auto
-        
-    - name: Run Gitleaks
-      run: docker run --rm -v ${{ github.workspace }}:/path zricethezav/gitleaks:latest detect --source="/path" --verbose
+     - name: Checkout Code
+       uses: actions/checkout@v4
+       with:
+         fetch-depth: 0
+    
+     - name: Run Semgrep
+       uses: returntocorp/semgrep-action@v2
+       with:
+         config: auto
+    
+     - name: Run Gitleaks
+       uses: gitleaks/gitleaks-action@v2
+       env:
+         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

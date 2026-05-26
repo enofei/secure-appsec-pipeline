@@ -17,11 +17,12 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
+      - name: Install Semgrep
+        run: pip install semgrep
+      
       - name: Run Semgrep
-        uses: returntocrop/semgrep-action@v4
-        with:
-          config: auto
+        run: semgrep --config=auto
+        
 
       - name: Run Gitleaks
         uses: gitleaks/gitleaks-action@v2

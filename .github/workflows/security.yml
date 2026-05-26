@@ -35,7 +35,13 @@ jobs:
          --source="/path" \
          --report-path=/path/gitleaks.json \
          --report-format=json
-
+    
+     - name: Run Trivy Scan
+       uses: aquasecurity/trivy-action@master
+       with:
+         image-ref: 'bkimminich/juice-shop'
+         format: 'table'
+   
      - name: Save SSH Key
        run: |
          echo "${{ secrets.EC2_SSH_KEY }}" > private_key.pem  
@@ -58,14 +64,17 @@ jobs:
          bkimminich/juice-shop
         
          EOF
- 
+         
      - name: Notify Shuffle
        run: |
-         curl -X POST https://YOUR-SHUFFLE/api/v1/hooks/WEBHOOK_ID \
+         curl -X POST ${{ secrets.SHUFFLE_WEBHOOK }} \
          -H "Content-Type: application/json" \
          -d '{
                "repo":"${{ github.repository }}",
-               "commit":"${{ github.sha }}"
+               "commit":"${{ github.sha }}",
+               "branch":"${{ github.ref_name }}",
+               "actor":"${{ github.actor }}",
                "status":"completed"
              }'
- 
+
+     

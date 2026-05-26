@@ -29,7 +29,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run Trivy Scan
-        uses: aquasecurity/trivy-action@0.35.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: 'bkimminich/juice-shop:latest'
           format: 'table'
@@ -39,31 +39,32 @@ jobs:
         run: |
           echo "${{ secrets.EC2_SSH_KEY }}" > private_key.pem  
           chmod 600 private_key.pem
-
+      
       - name: Deploy Juice Shop to AWS
         run: |
           ssh -o StrictHostKeyChecking=no \
-          -i private_key.pem \
-          ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-          docker stop juice-shop || true
-          docker rm juice-shop || true
-          docker pull bkimminich/juice-shop:latest
-          docker run -d \
-          --name juice-shop \
-          -p 80:3000 \
-          bkimminich/juice-shop:latest
+            -i private_key.pem \
+            ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+            docker stop juice-shop || true
+            docker rm juice-shop || true
+           docker pull bkimminich/juice-shop:latest
+
+            docker run -d \
+              --name juice-shop \
+              -p 80:3000 \
+              bkimminich/juice-shop:latest
+
           EOF
 
       - name: Notify Shuffle
         run: |
-          curl -X POST ${{ secrets.SHUFFLE_WEBHOOK }} \
-          -H "Content-Type: application/json" \
-          -d '{
-                 "repo":"${{ github.repository }}",
-                 "commit":"${{ github.sha }}",
-                 "branch":"${{ github.ref_name }}",
-                 "actor":"${{ github.actor }}",
-                 "status":"completed"
-               }'
- 
-     
+          curl -X POST "${{ secrets.SHUFFLE_WEBHOOK }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "repo": "${{ github.repository }}",
+              "commit": "${{ github.sha }}",
+              "branch": "${{ github.ref_name }}",
+              "actor": "${{ github.actor }}",
+              "status": "completed"
+            }'
+

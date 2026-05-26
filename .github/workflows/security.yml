@@ -29,7 +29,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run Trivy Scan
-        uses: aquasecurity/trivy-action@0.36.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: 'bkimminich/juice-shop:latest'
           format: 'table'
@@ -48,9 +48,9 @@ jobs:
             docker stop juice-shop || true
             docker rm juice-shop || true
            docker pull bkimminich/juice-shop:latest
-
             docker run -d \
-              --name juice-shop \
+          
+             --name juice-shop \
               -p 80:3000 \
               bkimminich/juice-shop:latest
 

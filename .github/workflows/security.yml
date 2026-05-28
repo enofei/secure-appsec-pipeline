@@ -34,9 +34,10 @@ jobs:
         with:
           image-ref: 'docker.io/bkimminich/juice-shop:latest'
           format: 'table'
+          args: '--scanners vuln --skip-db-update --severity HIGH,CRITICAL'
           exit-code: '0' # 💡 Fails the build if critical vulnerabilities are found
-          ignore-unfixed: true
-          severity: 'CRITICAL,HIGH'
+          
+          
 
   deploy:
     needs: security-scan  # 💡 Blocks deployment if Semgrep, Gitleaks, or Trivy finds a critical bug

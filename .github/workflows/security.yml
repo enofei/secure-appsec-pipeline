@@ -29,6 +29,17 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+
+  # 2. Trivy pulls the Juice Shop image and scans it for vulnerabilities
+      - name: Run Trivy Image Scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'docker.io/bkimminich/juice-shop:latest'
+          format: 'table'
+          exit-code: '1' # 💡 Fails the build if critical vulnerabilities are found
+          ignore-unfixed: true
+          severity: 'CRITICAL,HIGH'
+
   deploy:
     needs: security-scan  # 💡 Blocks deployment if Semgrep or Gitleaks finds a critical bug
     runs-on: ubuntu-latest

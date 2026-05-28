@@ -34,10 +34,11 @@ jobs:
         with:
           image-ref: 'docker.io/bkimminich/juice-shop:latest'
           format: 'table'
-          exit-code: '0' # 💡 Fails the build if critical vulnerabilities are found
           scanners: 'vuln'
           severity: 'HIGH,CRITICAL'
           list-all-pkgs: 'false'
+          exit-code: '0' # 💡 Fails the build if critical vulnerabilities are found
+         
           
 
   deploy:

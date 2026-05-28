@@ -40,9 +40,9 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}  # Make sure this secret is added in GitHub
           script: |
-            # Stop and clean up old instances
-            docker stop juice-shop || true
-            docker rm juice-shop || true
+            # Clean up BOTH naming variations to free up Port 80
+            docker stop juice-shop juiceshop || true
+            docker rm juice-shop juiceshop || true
             
             # Fetch the newest image
             docker pull bkimminich/juice-shop:latest

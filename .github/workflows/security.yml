@@ -34,9 +34,10 @@ jobs:
         with:
           image-ref: 'docker.io/bkimminich/juice-shop:latest'
           format: 'table'
-          args: '--scanners vuln --skip-db-update --severity HIGH,CRITICAL'
           exit-code: '0' # 💡 Fails the build if critical vulnerabilities are found
-          
+          scanners: 'vuln'
+          severity: 'HIGH,CRITICAL'
+          list-all-pkgs: 'false'
           
 
   deploy:
